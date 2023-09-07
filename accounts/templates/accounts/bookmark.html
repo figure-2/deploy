@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block body %}
+<br>
+    <div class="row">
+        <div class="col-4">
+            <img src="{{user_info.profile_image.url}}"  class="img-fluid rounded-circle"  width="150px" alt="">
+        </div>
+        <div class="col-8">
+            <div class="row">
+                <div class="col-3">
+                    <p class="text-reset text-decoration-none" style="font-weight: 600;">{{user_info.username}}</p>
+                    
+                </div>
+                {% if user != user_info %}
+                    <div class="col-4">
+                        {% if user_info in user.followings.all %}
+                            <a href="{% url 'accounts:follow' username=user_info.username %}" class="btn btn-secondary btn-sm">팔로잉</a>
+                        {% else %}
+                            <a href="{% url 'accounts:follow' username=user_info.username %}" class="btn btn-primary btn-sm">팔로우</a>
+                        {% endif %}
+                    </div>    
+                {% endif %}
+            </div>
+
+            <!-- style = "padding: 10px" -->
+            <div class="row" >
+                <div class="col" >
+                    {{user_info.post_set.all|length}} 게시물 
+                </div>
+
+                <div class="col" > 
+                    <a href="{% url 'accounts:followers' username=user_info.username %}" class="text-decoration-none text-reset ">
+                        {{user_info.followers.all|length}} 팔로워
+                    </a>
+                </div>
+
+
+                <div class="col" >
+
+                    <a href="{% url 'accounts:followings' username=user_info.username %}" class="text-reset text-decoration-none ">
+                        {{user_info.followings.all|length}} 팔로잉
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div style="border-top: solid 2px rgba(50,50,50,0.1); width: 100%">
+
+            <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; margin: 20px">
+                
+                <div id="button_feed_list" style="cursor: pointer;margin: 0 30px;display: flex; flex-direction: row;align-items: center"> 
+                    <a class="nav-link "  href="{% url 'accounts:profile' username=user_info %}" > <i class="bi bi-grid"></i>내 게시물 </a>
+                </div>
+                
+                <div id="button_feed_like_list" style="cursor: pointer;margin: 0 30px;display: flex; flex-direction: row;align-items: center">
+                    <a class="nav-link "  href="{% url 'accounts:like_posts' username=user_info %}" > <i class="bi bi-balloon-heart"></i>좋아요</a>
+                </div>
+                    
+        
+            </div>
+        
+        </div>
+
+
+        <!-- 좋아요를 누른 게시물 -->
+        <div class="row row-cols-3">
+            {% for post in user_info.bookmark.all %}
+
+                <div class="col">
+                    <div class="card">
+                        <img src="{{post.image.url}}" alt="">
+                    </div>
+                </div>
+            {% endfor %}
+        </div>   
+
+    </div>
+{% endblock %}

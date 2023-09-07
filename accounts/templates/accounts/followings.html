@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block body %}
+
+
+    {% for following in person.followings.all %}
+        {{following.username}}
+    {% endfor %}
+
+{% endblock %}
